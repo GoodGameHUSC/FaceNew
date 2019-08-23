@@ -142,9 +142,9 @@ export default class LoginScreen extends React.Component {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ marginTop: 20 }}>
-        <TouchableWithoutFeedback style={{}} onPress={this.onSignUp}>
-          <Text style={{ textAlign: "center", fontSize: 13, fontWeight: "bold", color: "grey" }}>Already have an account ?
+      <View style={{ padding: 10 }}>
+        <TouchableWithoutFeedback style={{}} onPress={this.onSignUp} hitSlop={{top: 20, left: 20, bottom: 20, right: 20}}>
+          <Text style={{ textAlign: "center", fontSize: 13, fontWeight: "bold", color: "grey" }}>Is new member ?
           <Text style={{ color: '#6079ec' }}> Sign up here</Text></Text>
         </TouchableWithoutFeedback>
       </View>
@@ -155,7 +155,7 @@ export default class LoginScreen extends React.Component {
     return (
       <SafeAreaView style={styles.container} >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <KeyboardAvoidingView style={styles.main_view} behavior="height" enabled>
+          <KeyboardAvoidingView style={styles.main_view} behavior="padding" enabled>
             <Image style={styles.logo} source={require('../../assets/bg/2.png')} resizeMode="contain">
             </Image>
             <Text style={styles.title}>Welcome to Enjoger</Text>

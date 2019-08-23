@@ -2,7 +2,8 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import HomeScreen from '../../screens/HomeScreen';
 import TabBarIcon from '../../components/TabBarIcon';
-import { Platform } from 'react-native';
+import { Platform, View, Text } from 'react-native';
+import { TABS } from '../../constants/Routes';
 
 
 const config = {}
@@ -14,15 +15,14 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Enjoger',
+  // tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      title ={'Home'}
+      name={Platform.OS === 'ios'
+        ? 'ios-home'
+        : 'md-home'}
     />
   ),
   headerStyle: {
@@ -32,6 +32,6 @@ HomeStack.navigationOptions = {
   title: 'TabExample',
 };
 
-HomeStack.path = '';
+HomeStack.path = TABS.HOME._;
 
 export default HomeStack;

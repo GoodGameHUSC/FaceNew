@@ -20,7 +20,8 @@ class AppLoading extends React.Component {
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
     const userToken = await AppInit.loadingAsyncData()
-    this.props.navigation.navigate(userToken ? TABS.MAIN : TABS.AUTH._);
+    // this.props.navigation.navigate(userToken ? TABS.MAIN : TABS.AUTH._);
+    this.props.navigation.navigate(userToken ? TABS.MAIN : TABS.MAIN);
   };
 
   // Render any loading content that you like here

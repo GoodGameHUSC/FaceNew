@@ -6,33 +6,28 @@ import { Platform } from 'react-native';
 
 
 const config = {}
-const NewFeedStack = createStackNavigator(
+const EnjoyStack = createStackNavigator(
   {
     Home: HomeScreen,
   },
   config
 );
 
-NewFeedStack.navigationOptions = {
-  tabBarLabel: 'Feeds',
+EnjoyStack.navigationOptions = {
+  tabBarLabel: 'Enjoy',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      title = 'Feeds'
+      title = {'Enjoger'}
       name={
         Platform.OS === 'ios'
-          ? 'ios-images'
-          : 'md-images'
+          ? `ios-star`
+          : `md-star`
       }
     />
   ),
-  headerStyle: {
-    backgroundColor: '#633689',
-  },
-  headerTintColor: '#FFFFFF',
-  title: 'TabExample',
 };
 
-NewFeedStack.path = '';
+EnjoyStack.path = '';
 
-export default NewFeedStack;
+export default EnjoyStack;

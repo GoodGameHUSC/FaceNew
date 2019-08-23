@@ -14,14 +14,15 @@ const FriendsStack = createStackNavigator(
 );
 
 FriendsStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Friends',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
+      title = 'Friends'
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? 'ios-people'
+          : 'md-people'
       }
     />
   ),

@@ -9,5 +9,6 @@ export default stack = createStackNavigator({
   [TABS.AUTH.SIGNUP] : SignUpScreen
 },
   {
+    initialRouteName : TABS.AUTH.LOGIN,
     headerMode: 'none',
   })
