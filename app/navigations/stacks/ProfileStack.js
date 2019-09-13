@@ -14,15 +14,15 @@ const ProfileStack = createStackNavigator(
 );
 
 ProfileStack.navigationOptions = {
-  tabBarLabel: 'Profile',
+  tabBarLabel: 'Setting',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       title = {'Profile'}
       name={
         Platform.OS === 'ios'
-          ? `ios-reorder`
-          : 'md-reorder'
+          ? `ios-settings`
+          : 'md-settings'
       }
     />
   ),

@@ -43,6 +43,9 @@ const LOCATION = {
   _ : 'location',
   DETAIL : 'detail'
 }
+const CAMERA = {
+  _ : 'camera'
+}
 export const TABS = {
   APP_LOADING: 'app_loading',
   MAIN: HOME._,
@@ -53,6 +56,7 @@ export const TABS = {
   ENJOGER,// TAB 5
   //specify tab
   AUTH,
+  CAMERA,
   WALL,
   POST,
   LOCATION,

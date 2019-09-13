@@ -3,12 +3,15 @@ import { createStackNavigator } from 'react-navigation';
 import HomeScreen from '../../screens/HomeScreen';
 import TabBarIcon from '../../components/TabBarIcon';
 import { Platform } from 'react-native';
+import SearchScreen from '../../screens/SearchScreen';
 
 
-const config = {}
+const config = {
+  headerMode: 'none',
+}
 const NewFeedStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    Video: SearchScreen,
   },
   config
 );
@@ -18,11 +21,11 @@ NewFeedStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      title = 'Feeds'
+      title='Search'
       name={
         Platform.OS === 'ios'
-          ? 'ios-images'
-          : 'md-images'
+          ? 'ios-search'
+          : 'md-search'
       }
     />
   ),

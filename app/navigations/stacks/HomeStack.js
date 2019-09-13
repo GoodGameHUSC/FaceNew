@@ -4,33 +4,41 @@ import HomeScreen from '../../screens/HomeScreen';
 import TabBarIcon from '../../components/TabBarIcon';
 import { Platform, View, Text } from 'react-native';
 import { TABS } from '../../constants/Routes';
+import CameraScreen from '../../screens/CameraScreen';
+import PostDetail from '../../screens/PostDetail';
+import SearchScreen from '../../screens/SearchScreen';
 
 
-const config = {}
+const config = {
+  // title : 'Home'
+  headerMode: 'none',
+}
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
+    Search : SearchScreen,
+    PostDetail : PostDetail,
+    Camera : CameraScreen,
   },
   config
 );
 
-HomeStack.navigationOptions = {
-  // tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      title ={'Home'}
-      name={Platform.OS === 'ios'
-        ? 'ios-home'
-        : 'md-home'}
-    />
-  ),
-  headerStyle: {
-    backgroundColor: '#633689',
-  },
-  headerTintColor: '#FFFFFF',
-  title: 'TabExample',
-};
+// HomeStack.navigationOptions = {
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon
+//       focused={focused}
+//       title ={'News'}
+//       name={Platform.OS === 'ios'
+//         ? 'ios-paper'
+//         : 'md-paper'}
+//     />
+//   ),
+//   headerStyle: {
+//     backgroundColor: '#633689',
+//   },
+//   headerTintColor: '#FFFFFF',
+//   title: 'News Face',
+// };
 
 HomeStack.path = TABS.HOME._;
 

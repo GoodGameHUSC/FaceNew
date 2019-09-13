@@ -1,198 +1,204 @@
-import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import * as React from "react";
+import { Image, View, StyleSheet, Text, ListView, FlatList } from "react-native";
+import BackgroundScreen from "../components/BackgroundScreen";
+import { connectActionSheet } from "@expo/react-native-action-sheet";
+import Post from '../models/post';
+import { SafeAreaView } from 'react-navigation';
+import { ScrollView, TouchableWithoutFeedback, TouchableOpacity } from "react-native-gesture-handler";
+import NewLinePlaceHolder from "../components/NewLinePlaceHolder";
+import Themes from "../constants/Themes";
+import { Ionicons } from '@expo/vector-icons';
 
-import { MonoText } from '../components/StyledText';
-
-export default function HomeScreen() {
+function HeadLineItem(props) {
   return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Get started by opening</Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change this text and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text>
-
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MonoText>
-        </View>
-      </View>
-    </View>
+    <TouchableWithoutFeedback
+      style={styles.headlineItem}
+      onPress={() => props.navigation.navigate('PostDetail', {
+        data: props.item
+      })}
+    >
+      <Image
+        style={{ width: 190, height: 190, borderRadius: 10 }}
+        source={{ uri: props.item.urlToImage }}
+      />
+      <Text style={styles.headlineItemTitle}>{props.item.title}</Text>
+      <Text style={{ fontStyle: 'italic', fontSize: 14, width: '100%', textAlign: 'right' }}>{props.item.source.name}</Text>
+    </TouchableWithoutFeedback>
   );
 }
 
-HomeScreen.navigationOptions = {
-  header: null,
-};
+function EveryThingItem(props) {
+  return (
+    <TouchableWithoutFeedback
+      style={styles.everyThingItem}
+      onPress={() => props.navigation.navigate('PostDetail', {
+        data: props.item
+      })}
+    >
+      <Image
+        style={{ width: 90, height: 90, borderRadius: 10 }}
+        source={{ uri: props.item.urlToImage }}
+      />
+      <View style={{ width: 250, height: 90, marginHorizontal: 10 }}>
+        <Text style={styles.headlineItemTitle}>{props.item.title}</Text>
+        <Text style={{ fontStyle: 'italic', fontSize: 14, width: '100%', textAlign: 'right' }}>{props.item.source.name}</Text>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+}
+class Home extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
+  state = {
+    posts: null,
+    allNew: null
+  };
 
+  render() {
+    const { navigation } = this.props;
+    const IconSearch = <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+      <Ionicons
+        name={Platform.OS === 'ios'
+          ? 'ios-search'
+          : 'md-search'}
+        size={26}
+        color={'black'}
+      />
+    </TouchableOpacity>
+    const TopBar = <View style={styles.topBar}>
+      <Text style={styles.textBar}>Home</Text>
+      {IconSearch}
+    </View>
+    const NewLine = <View style={styles.NewLine}>
+      <Text style={styles.sectionTitle}>Top Headlines</Text>
+      <View style={{ paddingTop: 20, padding: 10 }}>
+        {
+          this.state.posts ?
+            <ScrollView horizontal={true} style={{ borderRadius: 10 }} >
+              <FlatList
+                style={{ marginBottom: 5, borderRadius: 10 }}
+                horizontal={true}
+                data={this.state.posts.articles}
+                renderItem={({ item }) => <HeadLineItem navigation={this.props.navigation} item={item} ></HeadLineItem>}
+                keyExtractor={item => item.url}
+              />
+            </ScrollView>
+            : <NewLinePlaceHolder />
+        }
+      </View>
+    </View>
+    const News = <View style={{ ...styles.card, minHeight: 500 }}>
+      <Text style={styles.sectionTitle}>All News</Text>
+      {
+        this.state.allNew ?
+          <ScrollView style={{ borderRadius: 10 }} >
+            <FlatList
+              style={{ marginBottom: 5, borderRadius: 10 }}
+              data={this.state.allNew.articles}
+              renderItem={({ item }) => <EveryThingItem navigation={this.props.navigation} item={item} ></EveryThingItem>}
+              keyExtractor={item => item.url}
+            />
+          </ScrollView>
+          : <NewLinePlaceHolder />
+      }
+    </View>
     return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
+      <BackgroundScreen>
+        <SafeAreaView
+          style={styles.container}
+        >
+          {TopBar}
+          <ScrollView style={{ minHeight: '100%' }}>
+            {NewLine}
+            {News}
+          </ScrollView>
+        </SafeAreaView>
+      </BackgroundScreen>
     );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
+  }
+
+  async componentDidMount() {
+    const posts = await Post.loadTopHeadLine();
+    this.setState({ posts });
+    const allNew = await Post.loadEveryThing();
+    this.setState({ allNew });
   }
 }
 
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
-  );
-}
+const HomeScreen = connectActionSheet(Home);
 
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
-}
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    height: "100%",
+    backgroundColor: "transparent",
+    flex: 1
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+  topBar: {
+    backgroundColor: 'white',
+    marginBottom: 5,
+    width: '100%',
+    height: 50,
+    padding: 10,
+    paddingLeft: 20,
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
-  contentContainer: {
-    paddingTop: 30,
+  textBar: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    width: '80%',
+    color: 'ge',
+    textAlign: "left"
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+  NewLine: {
+    minHeight: 50,
+    backgroundColor: 'white',
+    margin: 5,
+    padding: 5,
+    paddingTop: 10,
+    borderRadius: 10
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
+  card: {
+    backgroundColor: 'white',
+    margin: 5,
+    padding: 5,
+    paddingTop: 10,
+    borderRadius: 10
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
+  sectionTitle: {
+    marginLeft: 10,
+    width: '100%',
+    fontSize: 24,
+    fontWeight: 'bold',
+    width: '100%',
+    color: 'grey',
   },
-  homeScreenFilename: {
-    marginVertical: 7,
+  headlineItem: {
+    width: 200,
+    height: 300,
+    margin: 5,
+    padding: 5,
+    paddingTop: 5,
+    borderRadius: 10,
+    backgroundColor: Themes.screenBackgroundColor
   },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
+  everyThingItem: {
+    width: '100%',
+    height: 100,
+    margin: 5,
+    padding: 5,
+    paddingTop: 5,
+    borderRadius: 10,
+    backgroundColor: Themes.screenBackgroundColor,
+    flex: 1, flexDirection: 'row'
   },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
+  headlineItemTitle: {
     marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
+    fontWeight: "bold",
+    height: 70
+  }
 });
